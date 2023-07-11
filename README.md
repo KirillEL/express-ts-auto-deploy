@@ -16,6 +16,6 @@ cd express-ts-auto-deploy/
 chmod u+x express-ts-deploy.sh
 ```
 ```bash
-./express-ts-deploy.sh "Project name"
+./express-ts-deploy.sh project_name
 ```
 
