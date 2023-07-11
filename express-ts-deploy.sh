@@ -5,8 +5,6 @@ APP="$1"
 json_file="package.json"
 ts_json_file="tsconfig.json"
 
-
-
 CODE="
 import express, {Express, Request, Response} from 'express';
 import cors from 'cors';
@@ -41,8 +39,6 @@ DATA_FOR_TSCONFIG="{
 }
 "
 
-
-
 if [ -z $APP ]; then
     echo "Please create directory for project! Write name of directory!"
     exit 1
@@ -58,40 +54,30 @@ cd "$APP" || exit
 npm init -y
 touch "$FILE"
 
-
 echo "Downloading dependencies..."
 cat << EOF 
 -----------------------------------------
 EOF
-
+npm i typescript
 npm i -D nodemon
 npm i express cors fs dotenv
 npm i -D typescript @types/node @types/express @types/cors @types/dotenv
-
 npx tsc --init
 
 cat << EOF
 ------------------------------------------
 EOF
 
-
 json_data=$(cat "$json_file")
 ts_json_data=$(cat "$ts_json_file")
-
-
-
-
 
 new_json_data=$(echo "$json_data" | sed '/"main": "index.js",/a\ \ \ \"type\": \"module\",' | sed 's/"test": "echo \\"Error: no test specified\\" && exit 1"/"test": "echo \\"Error: no test specified\\" \&\& exit 1",/' | sed '/"test": "echo \\"Error: no test specified\\" && exit 1",/a\ \ \ \"build\": \"npx tsc\",\n\ \ \ \"start\": \"node dist/index.js\",\n\ \ \ \"dev\": \"concurrently \\"npx tsc --watch\\" \\"nodemon -q dist/index.js\\"\"')
 
 echo "$new_json_data" > "$json_file"
 
-
 echo "$DATA_FOR_TSCONFIG" > "$ts_json_file"
 
-
 echo -e "$CODE" >> "$FILE"
-
 
 echo "First building app..."
 cat << EOF
@@ -101,4 +87,3 @@ npm run build
 cat << EOF
 ------------------------------------------
 EOF
-
